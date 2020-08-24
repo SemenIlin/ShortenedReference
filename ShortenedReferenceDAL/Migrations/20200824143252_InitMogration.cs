@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ShortenedReferenceDAL.Migrations
 {
-    public partial class InitMigration : Migration
+    public partial class InitMogration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

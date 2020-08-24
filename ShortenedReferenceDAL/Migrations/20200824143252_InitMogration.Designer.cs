@@ -9,8 +9,8 @@ using ShortenedReferenceDAL.DataBase;
 namespace ShortenedReferenceDAL.Migrations
 {
     [DbContext(typeof(ReferenceShortenerContext))]
-    [Migration("20200824114436_InitMigration")]
-    partial class InitMigration
+    [Migration("20200824143252_InitMogration")]
+    partial class InitMogration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

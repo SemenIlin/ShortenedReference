@@ -12,10 +12,10 @@
 			@Html.DisplayFor(model => model.LongReference)
 		</dd>
 		<dt class="col-sm-2">
-			@Html.DisplayName("Shortened reference")
+			@Html.DisplayName("Short reference")
 		</dt>
 		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.ShortenedReference)
+			@Html.Label($"https://localhost:44339/Home/Ref?id={Model.ShortenedReference}")
 		</dd>
 		<dt class="col-sm-2">
 			@Html.DisplayName("Created data")

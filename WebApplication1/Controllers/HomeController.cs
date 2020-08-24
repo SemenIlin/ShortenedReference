@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using ShortenedReferenceBLL.Interfaces;
 using ShortenedReferenceCommon.Model;
 using System.Collections.Generic;
@@ -20,11 +19,11 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ClickOnALink(string shortenedReference)
+        public async Task<ActionResult> Ref(string id)
         {
             try
             {
-                var reference = await _referenceInfoService.Find(shortenedReference, false);
+                var reference = await _referenceInfoService.Find(id, false);
                 if(reference == null)
                 {
                     return View("NotFound");
@@ -32,7 +31,7 @@ namespace WebApplication1.Controllers
 
                 await _counterService.Update(reference.Id);
 
-                return View(reference);
+                return Redirect(reference.LongReference);
             }
             catch
             {
