@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ShortenedReferenceCommon.Model.ReferenceInfo>
+
+<p>
+	<a asp-action="Create">Create</a>
+</p>
+@if (Model != null)
+{
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayName("Long reference")
+			</th>
+			<th>
+				@Html.DisplayName("Shortened reference")
+			</th>
+			<th>
+				@Html.DisplayName("Created data")
+			</th>
+			<th>
+				@Html.DisplayName("Amount clicks")
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.LongReference)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ShortenedReference)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreatedData)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Counter.AmountClickLink)
+			</td>
+			<td>
+				@Html.ActionLink("Delete", "Delete", new {id = item.Id})
+			</td>
+		</tr>
+		}
+	</tbody>
+</table>
+}
