@@ -1,35 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShortenedReferenceBLL.Interfaces;
-using ShortenedReferenceCommon.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApplication1.Models;
+using WebApplication1.Mappers;
+using System.Linq;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IReferenceInfoService<ReferenceInfo> _referenceInfoService;
-        private readonly ICounterService<Counter> _counterService;
+        private readonly IReferenceInfoService _referenceInfoService;
 
-        public HomeController(IReferenceInfoService<ReferenceInfo> referenceInfoService, 
-                              ICounterService<Counter> counterService)
+        public HomeController(IReferenceInfoService referenceInfoService)
         {
             _referenceInfoService = referenceInfoService;
-            _counterService = counterService;
         }
 
         [HttpGet]
-        public async Task<ActionResult> Ref(string id)
+        [Route("{url:maxlength(10)}")]
+        public async Task<ActionResult> TransitionShortReference(string url)
         {
             try
             {
-                var reference = await _referenceInfoService.Find(id, false);
+                var reference = await _referenceInfoService.Find(url, false);
                 if(reference == null)
                 {
                     return View("NotFound");
                 }
 
-                await _counterService.Update(reference.Id);
+                await _referenceInfoService.Update(reference.Id);
 
                 return Redirect(reference.LongReference);
             }
@@ -41,17 +41,17 @@ namespace WebApplication1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<ReferenceInfo> references;
+            List<ReferenceInfoViewModel> references;
             try
             {
-                references = await _referenceInfoService.GetAll();
+                references = (await _referenceInfoService.GetAll()).MapToListViewModels().ToList();
             }
             catch
             {
                 references = null;
             }
 
-            return View(references);
+            return View(references) ;
         }
 
         [HttpGet]
@@ -61,36 +61,24 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(ReferenceInfo referenceInfo)
+        public async Task<ActionResult> Create(ReferenceInfoViewModel referenceInfo)
         {
             if (!ModelState.IsValid)
             {
                 return View("Create");
             }
 
-            var result = await _referenceInfoService.Create(referenceInfo);
+            var result = await _referenceInfoService.Create(referenceInfo.MapToDtoModel());
             if (result == null)
             {
                 return View("Create");
             }
 
-            var counter = await _counterService.Get(result.Id);
-            if (counter != null)
-            {
-                return RedirectToAction("ReadyLink", result);
-            }
-
-            counter = new Counter()
-            {
-                ReferenceInfoId = result.Id
-            };
-            await _counterService.Create(counter);
-
             return RedirectToAction("ReadyLink", result);
         }
 
         [HttpGet]
-        public IActionResult ReadyLink(ReferenceInfo referenceInfo)
+        public IActionResult ReadyLink(ReferenceInfoViewModel referenceInfo)
         {
             return View(referenceInfo);
         }
@@ -100,7 +88,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                var reference = await _referenceInfoService.Get(id.Value);
+                var reference = (await _referenceInfoService.Get(id.Value)).MapToViewModel();
 
                 return View(reference);
             }
@@ -127,7 +115,7 @@ namespace WebApplication1.Controllers
                 }
 
                 await _referenceInfoService.Remove(id.Value);
-                return RedirectToAction("Main");
+                return RedirectToAction("Index");
             }
             catch 
             {

@@ -9,8 +9,8 @@ using ShortenedReferenceDAL.DataBase;
 namespace ShortenedReferenceDAL.Migrations
 {
     [DbContext(typeof(ReferenceShortenerContext))]
-    [Migration("20200824143252_InitMogration")]
-    partial class InitMogration
+    [Migration("20200824215823_InitMigration")]
+    partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,30 +19,19 @@ namespace ShortenedReferenceDAL.Migrations
                 .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("ShortenedReferenceCommon.Model.Counter", b =>
-                {
-                    b.Property<int>("ReferenceInfoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AmountClickLink")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReferenceInfoId");
-
-                    b.ToTable("Counters");
-                });
-
-            modelBuilder.Entity("ShortenedReferenceCommon.Model.ReferenceInfo", b =>
+            modelBuilder.Entity("ShortenedReferenceDAL.Models.ReferenceInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountTransitions")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedData")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LongReference")
-                        .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("ShortenedReference")
@@ -51,15 +40,6 @@ namespace ShortenedReferenceDAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ReferenceInfos");
-                });
-
-            modelBuilder.Entity("ShortenedReferenceCommon.Model.Counter", b =>
-                {
-                    b.HasOne("ShortenedReferenceCommon.Model.ReferenceInfo", "ReferenceInfo")
-                        .WithOne("Counter")
-                        .HasForeignKey("ShortenedReferenceCommon.Model.Counter", "ReferenceInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

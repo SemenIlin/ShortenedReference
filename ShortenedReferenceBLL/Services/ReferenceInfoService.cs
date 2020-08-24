@@ -1,37 +1,38 @@
 ﻿using System;
 using ShortenedReferenceBLL.Interfaces;
 using System.Threading.Tasks;
-using ShortenedReferenceCommon.Model;
 using ShortenedReferenceDAL.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using ShortenedReferenceBLL.ModelDtos;
+using ShortenedReferenceBLL.Mappers;
 
 namespace ShortenedReferenceBLL.Services
 {
-    public class ReferenceInfoService : IReferenceInfoService<ReferenceInfo>
+    public class ReferenceInfoService : IReferenceInfoService
     {
         private static readonly int LENGTH_URL = 7;
         const string  CHARS= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";        
 
         private readonly Random random = new Random();
-        private readonly IReferenceInfoRepository<ReferenceInfo> _referenceInfoRepository;
+        private readonly IReferenceInfoRepository _referenceInfoRepository;
 
-        public ReferenceInfoService(IReferenceInfoRepository<ReferenceInfo> referenceInfoRepository)
+        public ReferenceInfoService(IReferenceInfoRepository referenceInfoRepository)
         {           
             _referenceInfoRepository = referenceInfoRepository;
         }
 
-        public async Task<ReferenceInfo> Create(ReferenceInfo referenceInfo)
-        {
+        public async Task<ReferenceInfoDto> Create(ReferenceInfoDto referenceInfo)
+        {            
             var referenceInDB = await _referenceInfoRepository.Find(referenceInfo.LongReference);
             if(referenceInDB != null)
             {
-                return referenceInDB;
+                return referenceInDB.MapToDtoModel();
             }
 
-            referenceInfo.ShortenedReference = Generate();
+            referenceInfo.ShortenedReference = await Generate();
 
-            return await _referenceInfoRepository.Create(referenceInfo);
+            return (await _referenceInfoRepository.Create(referenceInfo.MapToDbModel())).MapToDtoModel();
         }
 
         public async Task Remove(int id)
@@ -39,45 +40,50 @@ namespace ShortenedReferenceBLL.Services
             await _referenceInfoRepository.Remove(id);
         }
 
-        public Task<List<ReferenceInfo>> GetAll()
+        public async Task<List<ReferenceInfoDto>> GetAll()
         {
-            return _referenceInfoRepository.GetAll();
+            return (await _referenceInfoRepository.GetAll()).MapToListDtoModels().ToList();
         }
 
-        public Task<ReferenceInfo> Find(string url, bool isLongReference = true)
+        public async Task<ReferenceInfoDto> Find(string url, bool isLongReference = true)
         {
-            return _referenceInfoRepository.Find(url, isLongReference);
+            return (await _referenceInfoRepository.Find(url, isLongReference)).MapToDtoModel();
         }
 
-        public Task<ReferenceInfo> Get(int id)
+        public async Task<ReferenceInfoDto> Get(int id)
         {
-            return _referenceInfoRepository.Get(id);
+            return (await _referenceInfoRepository.Get(id)).MapToDtoModel();
         }
 
-        private string Generate()
+        public async Task Update(int id)
+        {
+            await _referenceInfoRepository.Update(id); 
+        }
+
+        private async Task<string> Generate()
         {
             string shortenedReference;
+            bool isSuccess; 
             do
             {
-                shortenedReference = new string(Enumerable.Repeat(CHARS, LENGTH_URL)
+                shortenedReference =  new string(Enumerable.Repeat(CHARS, LENGTH_URL)
                     .Select(s => s[random.Next(s.Length)]).ToArray());
+                isSuccess = await ValidateShortReference(shortenedReference);
             }
-            while (!ValidateShortReference(shortenedReference));
+            while(!isSuccess);
 
             return shortenedReference;
         }
 
-        private bool ValidateShortReference(string shortReference)
+        private async Task<bool> ValidateShortReference(string shortReference)
         {
             if(shortReference == null)
             {
                 return false;
             }
-
-            List<ReferenceInfo> collectionReferenceInfo = _referenceInfoRepository.GetAll().Result;
-            ReferenceInfo alignment = collectionReferenceInfo.Find(item => item.ShortenedReference.Equals(shortReference));
-
-            if (alignment != null)
+            ReferenceInfoDto reference = (await _referenceInfoRepository.Find(shortReference, false)).MapToDtoModel();
+          
+            if (reference != null)
             {
                 return false;
             }

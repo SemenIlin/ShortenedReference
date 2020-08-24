@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShortenedReferenceCommon.Model.ReferenceInfo>
+﻿@model IEnumerable<WebApplication1.Models.ReferenceInfoViewModel>
 <br />
 <h3>
 	<a asp-action="Create">CREATE</a>
@@ -34,13 +34,13 @@
 					@Html.DisplayFor(modelItem => item.LongReference)
 				</td>
 				<td>
-					@Html.Label($"https://localhost:44339/Home/Ref?id={item.ShortenedReference}")
+					@Html.Label($"https://localhost:44339/{item.ShortenedReference}")
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.CreatedData)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Counter.AmountClickLink)
+					@Html.DisplayFor(modelItem => item.CountTransitions)
 				</td>
 				<td>
 					@Html.ActionLink("Delete", "Delete", new { id = item.Id })

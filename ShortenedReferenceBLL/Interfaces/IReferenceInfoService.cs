@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using ShortenedReferenceBLL.ModelDtos;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShortenedReferenceBLL.Interfaces
 {
-    public interface IReferenceInfoService<T> : IService<T> where T : class
+    public interface IReferenceInfoService
     {
-        Task<T> Find(string url, bool isLongReference = true);
-        Task<List<T>> GetAll();
+        Task<ReferenceInfoDto> Find(string url, bool isLongReference = true);
+        Task<ReferenceInfoDto> Get(int id);
+        Task<List<ReferenceInfoDto>> GetAll();
+
         Task Remove(int id);
+        Task Update(int id);
+        Task<ReferenceInfoDto> Create(ReferenceInfoDto item);
     }
 }
