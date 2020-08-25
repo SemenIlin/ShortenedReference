@@ -14,8 +14,8 @@
 		<dt class="col-sm-2">
 			@Html.DisplayName("Short reference")
 		</dt>
-		<dd class="col-sm-10">
-			@Html.Label($"https://localhost:44339/{Model.ShortenedReference}")
+		<dd class="col-sm-10">			
+			@Html.Label($"{ViewBag.Url}{Model.ShortenedReference}")
 		</dd>
 		<dt class="col-sm-2">
 			@Html.DisplayName("Created data")

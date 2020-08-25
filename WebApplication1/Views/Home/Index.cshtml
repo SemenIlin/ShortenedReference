@@ -34,7 +34,7 @@
 					@Html.DisplayFor(modelItem => item.LongReference)
 				</td>
 				<td>
-					@Html.Label($"https://localhost:44339/{item.ShortenedReference}")
+					@Html.Label($"{ViewBag.Url}{item.ShortenedReference}")
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.CreatedData)

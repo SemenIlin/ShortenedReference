@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ShortenedReferenceBLL.Interfaces;
+using ShortenedReferenceBLL.ModelDtos;
 using ShortenedReferenceBLL.Services;
 
 namespace ShortenedReferenceBLL.DependencyInjection
@@ -8,7 +9,7 @@ namespace ShortenedReferenceBLL.DependencyInjection
     {
         public static void RegisterBusinessServices(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IReferenceInfoService, ReferenceInfoService>();
+            serviceCollection.AddScoped<IReferenceInfoService<ReferenceInfoDto>, ReferenceInfoService>();
         }
     }
 }

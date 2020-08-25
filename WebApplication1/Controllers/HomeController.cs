@@ -5,14 +5,16 @@ using System.Threading.Tasks;
 using WebApplication1.Models;
 using WebApplication1.Mappers;
 using System.Linq;
+using ShortenedReferenceBLL.ModelDtos;
+using System;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IReferenceInfoService _referenceInfoService;
+        private readonly IReferenceInfoService<ReferenceInfoDto> _referenceInfoService;
 
-        public HomeController(IReferenceInfoService referenceInfoService)
+        public HomeController(IReferenceInfoService<ReferenceInfoDto> referenceInfoService)
         {
             _referenceInfoService = referenceInfoService;
         }
@@ -24,7 +26,7 @@ namespace WebApplication1.Controllers
             try
             {
                 var reference = await _referenceInfoService.Find(url, false);
-                if(reference == null)
+                if (reference == null)
                 {
                     return View("NotFound");
                 }
@@ -50,6 +52,8 @@ namespace WebApplication1.Controllers
             {
                 references = null;
             }
+
+            ViewBag.Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/";
 
             return View(references) ;
         }
@@ -80,6 +84,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult ReadyLink(ReferenceInfoViewModel referenceInfo)
         {
+            ViewBag.Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/";
             return View(referenceInfo);
         }
 
@@ -89,6 +94,7 @@ namespace WebApplication1.Controllers
             try
             {
                 var reference = (await _referenceInfoService.Get(id.Value)).MapToViewModel();
+                ViewBag.Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/";
 
                 return View(reference);
             }

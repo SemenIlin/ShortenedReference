@@ -8,7 +8,7 @@ using ShortenedReferenceDAL.Models;
 
 namespace ShortenedReferenceDAL.Repositories
 {
-    public class ReferenceInfoRepository : IReferenceInfoRepository
+    public class ReferenceInfoRepository : IReferenceInfoRepository<ReferenceInfo>
     {
         private readonly ReferenceShortenerContext _context;
 

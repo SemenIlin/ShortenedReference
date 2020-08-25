@@ -1,17 +1,13 @@
-﻿using ShortenedReferenceDAL.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ShortenedReferenceDAL.Interfaces
 {
-    public interface IReferenceInfoRepository
+    public interface IReferenceInfoRepository<T> : IRepository<T> where T :class
     {
-        Task<ReferenceInfo> Find(string url, bool isLongReference = true);
-        Task<ReferenceInfo> Get(int id);
-        Task<List<ReferenceInfo>> GetAll();
-
+        Task<T> Find(string url, bool isLongReference = true);
+        Task<List<T>> GetAll();
         Task Remove(int id);
         Task Update(int id);
-        Task<ReferenceInfo> Create(ReferenceInfo item);
     }
 }

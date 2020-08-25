@@ -6,18 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using ShortenedReferenceBLL.ModelDtos;
 using ShortenedReferenceBLL.Mappers;
+using ShortenedReferenceDAL.Models;
 
 namespace ShortenedReferenceBLL.Services
 {
-    public class ReferenceInfoService : IReferenceInfoService
+    public class ReferenceInfoService : IReferenceInfoService<ReferenceInfoDto>
     {
         private static readonly int LENGTH_URL = 7;
         const string  CHARS= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";        
 
         private readonly Random random = new Random();
-        private readonly IReferenceInfoRepository _referenceInfoRepository;
+        private readonly IReferenceInfoRepository<ReferenceInfo> _referenceInfoRepository;
 
-        public ReferenceInfoService(IReferenceInfoRepository referenceInfoRepository)
+        public ReferenceInfoService(IReferenceInfoRepository<ReferenceInfo> referenceInfoRepository)
         {           
             _referenceInfoRepository = referenceInfoRepository;
         }
