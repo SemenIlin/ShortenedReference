@@ -6,21 +6,20 @@ using WebApplication1.Models;
 using WebApplication1.Mappers;
 using System.Linq;
 using ShortenedReferenceBLL.ModelDtos;
-using System;
 
 namespace WebApplication1.Controllers
 {
-    public class HomeController : Controller
+    public class ReferenceController : Controller
     {
         private readonly IReferenceInfoService<ReferenceInfoDto> _referenceInfoService;
 
-        public HomeController(IReferenceInfoService<ReferenceInfoDto> referenceInfoService)
+        public ReferenceController(IReferenceInfoService<ReferenceInfoDto> referenceInfoService)
         {
             _referenceInfoService = referenceInfoService;
         }
 
         [HttpGet]
-        [Route("{url:maxlength(10)}")]
+        [Route("{url:maxlength(100)}")]
         public async Task<ActionResult> TransitionShortReference(string url)
         {
             try
@@ -41,7 +40,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<ViewResult> Index()
         {
             List<ReferenceInfoViewModel> references;
             try
@@ -59,7 +58,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ViewResult Create()
         {            
             return View();
         }
@@ -82,14 +81,14 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IActionResult ReadyLink(ReferenceInfoViewModel referenceInfo)
+        public ViewResult ReadyLink(ReferenceInfoViewModel referenceInfo)
         {
             ViewBag.Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/";
             return View(referenceInfo);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ViewResult> Delete(int? id)
         {
             try
             {
@@ -100,7 +99,7 @@ namespace WebApplication1.Controllers
             }
             catch
             {
-                return NotFound();
+                return View("NotFound");
             }
         }
 
