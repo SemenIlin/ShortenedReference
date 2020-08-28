@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.ReferenceInfoViewModel>
+﻿@model IEnumerable<ShortReference.Models.ReferenceInfoViewModel>
 <br />
 <h3>
 	<a asp-action="Create">CREATE</a>
@@ -30,7 +30,7 @@
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>
+				<td >
 					@Html.DisplayFor(modelItem => item.LongReference)
 				</td>
 				<td>

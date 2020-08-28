@@ -11,7 +11,7 @@ using ShortenedReferenceDAL.DataBase;
 using ShortenedReferenceDAL.DependencyInjection;
 using System;
 
-namespace WebApplication1
+namespace ShortReference
 {
     public class Startup
     {

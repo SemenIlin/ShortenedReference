@@ -1,9 +1,9 @@
 ﻿using ShortenedReferenceBLL.ModelDtos;
 using System.Collections.Generic;
 using System.Linq;
-using WebApplication1.Models;
+using ShortReference.Models;
 
-namespace WebApplication1.Mappers
+namespace ShortReference.Mappers
 {
     public static class MapperUI
     {
