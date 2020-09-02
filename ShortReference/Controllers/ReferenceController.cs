@@ -64,7 +64,7 @@ namespace ShortReference.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(ReferenceInfoViewModel referenceInfo)
+         public async Task<ActionResult> Create(ReferenceInfoViewModel referenceInfo)
         {
             if (!ModelState.IsValid)
             {
@@ -74,14 +74,15 @@ namespace ShortReference.Controllers
             var result = await _referenceInfoService.Create(referenceInfo.MapToDtoModel());
             if (result == null)
             {
+                ViewBag.ErrorMessage = "Invalid data";
                 return View("Create");
             }
 
-            return RedirectToAction("ReadyLink", result);
+            return RedirectToAction("ReadyReference", result);
         }
 
         [HttpGet]
-        public ViewResult ReadyLink(ReferenceInfoViewModel referenceInfo)
+        public ViewResult ReadyReference(ReferenceInfoViewModel referenceInfo)
         {
             ViewBag.Url = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/";
             return View(referenceInfo);
@@ -113,7 +114,7 @@ namespace ShortReference.Controllers
             }
             try
             {
-                var reference = await _referenceInfoService.Get(id.Value); 
+                var reference = await _referenceInfoService.Get(id.Value);
                 if (reference == null)
                 {
                     return View("NotFound");
@@ -122,7 +123,7 @@ namespace ShortReference.Controllers
                 await _referenceInfoService.Remove(id.Value);
                 return RedirectToAction("Index");
             }
-            catch 
+            catch
             {
                 return View("NotFound");
             }

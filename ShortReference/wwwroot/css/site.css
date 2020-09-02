@@ -1,17 +1,5 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-table {
-    width: 100%;
-}
-
-tr :first-child {
-    width: 0;
-    white-space: nowrap;
-}
-
-tr :last-child {
-    width: 100%;
-}
 
 a.navbar-brand {
   white-space: normal;

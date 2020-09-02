@@ -17,60 +17,22 @@
 
 	@if (Model != null)
 	{
-		<tbody>
-			@foreach (var item in Model)
-			{
-				<tr>
-					<td>@item.LongReference</td>
-					<td>@Html.Label($"{ViewBag.Url}{item.ShortenedReference}")</td>
-					<td>@item.CreatedData</td>
-					<td class="transition">@item.CountTransitions</td>
-					<td>@Html.ActionLink("Delete", "Delete", new { id = item.Id })</td>
-				</tr>
-			}
-		</tbody>
-	}
-
-</table>
-
-@*<br />
-<table width="100%">
-	<tr>
-		<th width="30%">
-			@Html.DisplayName("Long reference")
-		</th>
-		<th width="20%">
-			@Html.DisplayName("Short reference")
-		</th>
-		<th width="20%">
-			@Html.DisplayName("Created data")
-		</th>
-		<th width="10%">
-			@Html.DisplayName("Transitions")
-		</th>
-		<th width="20%"></th>
-	</tr>
-	@if (Model != null)
+	<tbody>
+	@foreach (var item in Model)
 	{
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.LongReference)
-				</td>
-				<td>
-					@Html.Label($"{ViewBag.Url}{item.ShortenedReference}")
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedData)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CountTransitions)
-				</td>
-				<td>
-					@Html.ActionLink("Delete", "Delete", new { id = item.Id })
-				</td>
-			</tr>
-		}
+	<tr>
+		<td>@item.LongReference</td>
+		<td>
+			<a href="@item.ShortenedReference">
+				@ViewBag.Url@item.ShortenedReference
+			</a>
+		</td>
+		<td>@item.CreatedData</td>
+		<td class="transition">@item.CountTransitions</td>
+		<td>@Html.ActionLink("Delete", "Delete", new { id = item.Id })</td>
+	</tr>
 	}
-</table>*@
+	</tbody>
+	}
+
+</table>	

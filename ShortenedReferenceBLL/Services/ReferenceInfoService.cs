@@ -24,8 +24,14 @@ namespace ShortenedReferenceBLL.Services
         }
 
         public async Task<ReferenceInfoDto> Create(ReferenceInfoDto referenceInfo)
-        {            
-            var referenceInDB = await _referenceInfoRepository.Find(referenceInfo.LongReference);
+        {
+            bool isValidate = await ValidateReference(referenceInfo.LongReference);
+            if (!isValidate)
+            {
+                return await Task.FromResult<ReferenceInfoDto>(null);
+            }
+
+            ReferenceInfo referenceInDB = await _referenceInfoRepository.Find(referenceInfo.LongReference);
             if(referenceInDB != null)
             {
                 return referenceInDB.MapToDtoModel();
@@ -76,15 +82,24 @@ namespace ShortenedReferenceBLL.Services
             return shortenedReference;
         }
 
-        private async Task<bool> ValidateShortReference(string shortReference)
+        private Task<bool> ValidateReference(string reference)
         {
-            if(shortReference == null)
+            bool result = Uri.TryCreate(reference, UriKind.Absolute, out Uri uriResult) &&
+                (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+
+            return Task.FromResult(result);
+        }
+
+        private async Task<bool> ValidateShortReference(string reference)
+        {
+            if(reference == null)
             {
                 return false;
             }
-            ReferenceInfoDto reference = (await _referenceInfoRepository.Find(shortReference, false)).MapToDtoModel();
-          
-            if (reference != null)
+
+            ReferenceInfoDto myReference = (await _referenceInfoRepository.Find(reference, false)).MapToDtoModel();
+
+            if (myReference != null)
             {
                 return false;
             }

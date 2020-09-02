@@ -28,8 +28,7 @@ namespace ShortReference
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ReferenceShortenerContext>(options =>
-                options.UseMySql(connection, mysqlOptions => 
-                        mysqlOptions.ServerVersion(new ServerVersion(new Version(10, 4, 14), ServerType.MariaDb))));
+                options.UseMySql(connection, builder => builder.EnableRetryOnFailure()));
 
             services.RegisterBusinessServices();
 
