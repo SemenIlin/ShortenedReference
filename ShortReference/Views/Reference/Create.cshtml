@@ -11,7 +11,7 @@
 				<label asp-for="LongReference" class="control-label">Long reference</label>
                 <input asp-for="LongReference" class="form-control" />
                 <span asp-validation-for="LongReference" class="text-danger"></span>
-                <span>@ViewBag.ErrorMessage</span>
+                <span class="errormessage">@ViewBag.ErrorMessage</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

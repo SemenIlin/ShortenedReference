@@ -1,6 +1,6 @@
 ﻿td.transition {
 	text-align: center;
 }
-span {
+span.errormessage {
 	color: rgb(245, 7, 7);	
 }
